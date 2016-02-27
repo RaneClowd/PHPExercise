@@ -5,28 +5,29 @@ include 'HomeRoom.php';
 
 class DataStore
 {
-    private $bookshelf;
     private $homerooms = array();
 
     function __construct() {
-        $this->loadBooksIntoBookshelf();
-        $this->loadHomeRooms();
+        $bookshelf = $this->loadMasterBookshelf();
+        $this->loadHomeRoomsAndGiveBookshelf($bookshelf);
     }
 
-    private function loadBooksIntoBookshelf() {
+    private function loadMasterBookshelf() {
         $bookshelfFile = fopen("BookShelf.txt", "r") or die("Unable to open file!");
-        $this->bookshelf = new Bookshelf();
+        $bookshelf = new Bookshelf();
 
         while(!feof($bookshelfFile)) {
             $bookLine = fgets($bookshelfFile);
             $bookComponents = explode("\t", $bookLine);
 
-            $this->bookshelf->addBook($bookComponents[0], $bookComponents[1], $bookComponents[2], $bookComponents[4]);
+            $bookshelf->addBook($bookComponents[0], $bookComponents[1], $bookComponents[2], $bookComponents[4]);
         }
         fclose($bookshelfFile);
+
+        return $bookshelf;
     }
 
-    private function loadHomeRooms() {
+    private function loadHomeRoomsAndGiveBookshelf($bookshelf) {
         $studentFile = simplexml_load_file("Students.xml") or die("Error: Cannot create object");
         foreach ($studentFile->children() as $homeRoomNode) {
             $homeRoom = new HomeRoom();
@@ -41,6 +42,7 @@ class DataStore
                 $homeRoom->students[] = $student;
             }
 
+            $homeRoom->bookshelf = $bookshelf->copyOfBookshelf();
             $this->homerooms[] = $homeRoom;
         }
     }
@@ -51,6 +53,28 @@ class DataStore
             array_push($names, $homeroom->name);
         }
         return $names;
+    }
+
+    function homeroomWithName($homeroomName) {
+        foreach ($this->homerooms as $homeroom) {
+            if ($homeroom->name == $homeroomName) {
+                return $homeroom;
+            }
+        }
+
+        return null;
+    }
+
+    function studentWithId($studentId) {
+        foreach ($this->homerooms as $homeroom) {
+            foreach ($homeroom->students as $student) {
+                if ($student->studentId == $studentId) {
+                    return $student;
+                }
+            }
+        }
+
+        return null;
     }
 
     function display() {

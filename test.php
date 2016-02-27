@@ -15,9 +15,51 @@
 
             $dataStore = new DataStore();
 
-            foreach ($dataStore->homeroomNames() as $homeroomName) {
-                echo "<input type=\"submit\" name=\"homeroom\" value=\"" . $homeroomName . "\">";
+            $homeroomNameParamKey = "homeroom";
+            $studentIdKey = "id";
+
+            if (isset($_GET[$homeroomNameParamKey])) {
+                $homeroomName = trim($_GET[$homeroomNameParamKey]);
+                $homeroom = $dataStore->homeroomWithName($homeroomName);
+
+                if ($homeroom == null) {
+                    echo "Error: homeroom not found";
+                } else {
+                    displayStudentOptions($homeroom);
+                }
+            } elseif (isset($_GET[$studentIdKey])) {
+                $studentId = trim($_GET[$studentIdKey]);
+                $student = $dataStore->studentWithId($studentId);
+
+                if ($student == null) {
+                    echo "Error: student not found";
+                } else {
+                    displayBooksPageForStudent($student);
+                }
+            } else {
+                displayHomeRoomOptions();
             }
+
+            function displayBooksPageForStudent($student) {
+                echo "book page<br>";
+                $student->display();
+            }
+
+            function displayStudentOptions($homeroom) {
+                global $studentIdKey;
+                foreach ($homeroom->students as $student) {
+                    echo "<button name=\"" . $studentIdKey ."\" value=\"" . $student->studentId . "\" type=\"submit\">$student->firstName $student->lastName</button><br>";
+                }
+            }
+
+            function displayHomeRoomOptions() {
+                global $dataStore, $homeroomNameParamKey;
+                foreach ($dataStore->homeroomNames() as $homeroomName) {
+                    echo "<input type=\"submit\" name=\"" . $homeroomNameParamKey . "\" value=\"" . $homeroomName . "\">";
+                }
+            }
+
+
             ?>
 
         </form>
