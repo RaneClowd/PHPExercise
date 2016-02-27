@@ -1,5 +1,7 @@
 <?php
 
+include 'Book.php';
+
 class Bookshelf
 {
     public $books = array();
