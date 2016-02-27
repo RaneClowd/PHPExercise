@@ -11,14 +11,17 @@ class Student
 
     public $homeroom;
     public $book;
+    public $loanTimestamp;
 
-    function checkOutBook($book) {
-        $book->isCheckedOut = true;
+    function checkOutBook($book, $dateCheckedOut) {
+        $book->student = $this;
+
         $this->book = $book;
+        $this->loanTimestamp = $dateCheckedOut;
     }
 
     function returnBook() {
-        $this->book->isCheckedOut = false;
+        $this->book->student = null;
         $this->book = null;
     }
 

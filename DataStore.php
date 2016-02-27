@@ -5,12 +5,15 @@ include 'HomeRoom.php';
 
 class DataStore
 {
-    private $homerooms = array();
+    public $homerooms = array();
     private $commonBookshelf;
 
     function __construct() {
         $this->commonBookshelf = $this->loadMasterBookshelf();
         $this->loadHomeRooms();
+
+        // TODO: figure out what's going on with the timestamp's timezone
+        date_default_timezone_set("America/Chicago");
     }
 
     private function loadMasterBookshelf() {
@@ -45,7 +48,8 @@ class DataStore
                 $student->studentId = $studentNode->ID;
 
                 if (!empty($studentNode->Loan)) {
-                    $loanConnectionsToMake[] = array($student, $studentNode->Loan->Homeroom, $studentNode->Loan->ISBN);
+                    $loanTimestamp = strtotime($studentNode->Loan->Date);
+                    $loanConnectionsToMake[] = array($student, $studentNode->Loan->Homeroom, $studentNode->Loan->ISBN, $loanTimestamp);
                 }
 
                 // TODO: make sure there's no GC-type problems with cyclical refs like this (and on book-homerooms)
@@ -62,10 +66,11 @@ class DataStore
             $bookStudentHas = $bookHomeroom->bookshelf->bookWithISBN($loanConnection[2]);
             $bookStudentHas->homeroom = $bookHomeroom;
 
+            $loanTimestamp = $loanConnection[3];
             if ($bookStudentHas == null) {
                 echo "Error: couldn't match book to student";
             } else {
-                $loanConnection[0]->checkOutBook($bookStudentHas);
+                $loanConnection[0]->checkOutBook($bookStudentHas, $loanTimestamp);
             }
         }
     }
@@ -85,7 +90,7 @@ class DataStore
 
             // TODO: error if book not found
 
-            if (!$bookInRoom->isCheckedOut) {
+            if (!$bookInRoom->isCheckedOut()) {
                 array_push($names, $homeroom->name);
             }
         }
@@ -121,17 +126,22 @@ class DataStore
         $booksWithUnknownStatus = $this->commonBookshelf->books;
 
         foreach ($booksWithUnknownStatus as $bookThatMightBeAvailable) {
-            $bookFoundToBeAvailable = false;
+            $available = false;
+            $studentsWithBook = array();
 
             foreach ($this->homerooms as $homeroom) {
+                $availabilityEntry = array();
                 $bookFromHomeroom = $homeroom->bookshelf->bookWithISBN($bookThatMightBeAvailable->ISBN);
-                if (!$bookFromHomeroom->isCheckedOut) {
-                    $bookFoundToBeAvailable = true;
-                    break;
+                array_push($availabilityEntry, $bookFromHomeroom);
+
+                if ($bookFromHomeroom->isCheckedOut()) {
+                    array_push($studentsWithBook, $bookFromHomeroom->student);
+                } else {
+                    $available = true;
                 }
             }
 
-            array_push($bookAvailability, array($bookThatMightBeAvailable, $bookFoundToBeAvailable));
+            array_push($bookAvailability, array($bookThatMightBeAvailable, $available, $studentsWithBook));
         }
 
         return $bookAvailability;
@@ -154,7 +164,7 @@ class DataStore
             return "Unable to find book";
         }
 
-        $student->checkOutBook($book);
+        $student->checkOutBook($book, time());
         $this->saveBackToXML();
 
         return false;
@@ -195,6 +205,9 @@ class DataStore
                     $loanNode = $studentNode->addChild('Loan');
                     $loanNode->addChild('ISBN', $student->book->ISBN);
                     $loanNode->addChild('Homeroom', $student->book->homeroom->name);
+
+                    $dateString = date("m/d/Y H:i", $student->loanTimestamp);
+                    $loanNode->addChild('Date', $dateString);
                 }
             }
         }

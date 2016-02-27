@@ -109,6 +109,7 @@
     function displayListItemForBook($bookAvailability, $student) {
         $book = $bookAvailability[0];
         $available = $bookAvailability[1];
+        $studentsWithBook = $bookAvailability[2];
 
         echo "<tr>";
         echo "<td>" . $book->title . "</td>";
@@ -118,6 +119,12 @@
         } else {
             echo "<td>(all checked out)</td>";
         }
+
+        echo "<td>";
+        foreach ($studentsWithBook as $student) {
+            echo $student->firstName . ",";
+        }
+        echo "</td>";
 
         echo "</tr>";
     }
@@ -137,6 +144,11 @@
     }
 
     ?>
+
+    <hr>
+    <form action="allloans.php" method=get>
+        <button>View all loans</button>
+    </form>
 
     </body>
 

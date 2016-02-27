@@ -7,7 +7,12 @@ class Book
     public $ISBN;
     public $lexile;
     public $homeroom;
-    public $isCheckedOut = false;
+
+    public $student;
+
+    function isCheckedOut() {
+        return !empty($this->student);
+    }
 
     /*function copyOfBook() {
         // TODO: checked out is the only thing i really want to clone. Check to see if clone will work here
