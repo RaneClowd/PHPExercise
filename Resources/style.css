@@ -77,6 +77,11 @@ button {
     background-color: #44FFD4;
 }
 
+#popup .medButton {
+    margin-top: .6vw;
+    margin-bottom: .6vw;
+}
+
 .line {
     width: 100%;
     height: 2px;
