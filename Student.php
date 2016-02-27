@@ -8,14 +8,20 @@ class Student
     public $studentId;
     public $firstName;
     public $lastName;
+
+    public $homeroom;
     public $book;
 
-    function setBookCheckedOut(Book $book) {
-        $book->checkedOut = true;
+    function setBookCheckedOut($book) {
+        $book->isCheckedOut = true;
         $this->book = $book;
     }
 
     function display() {
         echo "$this->firstName $this->lastName ($this->studentId)" . "<br>";
+
+        if ($this->book != null) {
+            echo "has book " . $this->book->title . "<br>";
+        }
     }
 }

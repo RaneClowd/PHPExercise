@@ -6,8 +6,17 @@ class Bookshelf
 {
     public $books = array();
 
-    function copyOfBookshelf()
-    {
+    function bookWithISBN($isbn) {
+        foreach ($this->books as $book) {
+            if ($book->ISBN == $isbn) {
+                return $book;
+            }
+        }
+
+        return null;
+    }
+
+    function copyOfBookshelf() {
         // this is essentially what I would have done in clone anyway
         $bookshelfCopy = new Bookshelf();
         foreach ($this->books as $book) {

@@ -33,16 +33,29 @@ class DataStore
             $homeRoom = new HomeRoom();
             $homeRoom->name = $homeRoomNode->Name;
             $homeRoom->level = $homeRoomNode->Level;
+            $homeRoom->bookshelf = $bookshelf->copyOfBookshelf();
+
             foreach ($homeRoomNode->Students->children() as $studentNode) {
                 $student = new Student();
                 $student->firstName = $studentNode->FirstName;
                 $student->lastName = $studentNode->LastName;
                 $student->studentId = $studentNode->ID;
 
+                if (!empty($studentNode->HasBook)) {
+                    $bookStudentHas = $homeRoom->bookshelf->bookWithISBN($studentNode->HasBook);
+
+                    if ($bookStudentHas == null) {
+                        echo "Error: couldn't match book to student";
+                    } else {
+                        $student->setBookCheckedOut($bookStudentHas);
+                    }
+                }
+
+                // TODO: make sure there's no GC-type problems with cyclical refs like this
                 $homeRoom->students[] = $student;
+                $student->homeroom = $homeRoom;
             }
 
-            $homeRoom->bookshelf = $bookshelf->copyOfBookshelf();
             $this->homerooms[] = $homeRoom;
         }
     }

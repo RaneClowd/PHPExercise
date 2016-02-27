@@ -40,9 +40,20 @@
                 displayHomeRoomOptions();
             }
 
-            function displayBooksPageForStudent($student) {
-                echo "book page<br>";
-                $student->display();
+            function displayBooksPageForStudent($student) {;
+                foreach ($student->homeroom->bookshelf->books as $book) {
+                    displayListItemForBook($book);
+                }
+            }
+
+            function displayListItemForBook($book) {
+                echo $book->title;
+
+                if ($book->isCheckedOut) {
+                    echo " (checked out)";
+                }
+
+                echo "<br>";
             }
 
             function displayStudentOptions($homeroom) {

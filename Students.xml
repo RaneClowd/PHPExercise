@@ -8,6 +8,7 @@
                 <ID>1</ID>
                 <FirstName>David</FirstName>
                 <LastName>Jones</LastName>
+                <HasBook>978-0-547-55029-9</HasBook>
             </Student>
             <Student>
                 <ID>3</ID>
