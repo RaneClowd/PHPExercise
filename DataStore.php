@@ -1,13 +1,16 @@
 <?php
 
 include 'Bookshelf.php';
+include 'HomeRoom.php';
 
 class DataStore
 {
     private $bookshelf;
+    private $homerooms = array();
 
     function __construct() {
         $this->loadBooksIntoBookshelf();
+        $this->loadHomeRooms();
     }
 
     private function loadBooksIntoBookshelf() {
@@ -23,7 +26,37 @@ class DataStore
         fclose($bookshelfFile);
     }
 
+    private function loadHomeRooms() {
+        $studentFile = simplexml_load_file("Students.xml") or die("Error: Cannot create object");
+        foreach ($studentFile->children() as $homeRoomNode) {
+            $homeRoom = new HomeRoom();
+            $homeRoom->name = $homeRoomNode->Name;
+            $homeRoom->level = $homeRoomNode->Level;
+            foreach ($homeRoomNode->Students->children() as $studentNode) {
+                $student = new Student();
+                $student->firstName = $studentNode->FirstName;
+                $student->lastName = $studentNode->LastName;
+                $student->studentId = $studentNode->ID;
+
+                $homeRoom->students[] = $student;
+            }
+
+            $this->homerooms[] = $homeRoom;
+        }
+    }
+
+    function homeroomNames() {
+        $names = array();
+        foreach ($this->homerooms as $homeroom) {
+            array_push($names, $homeroom->name);
+        }
+        return $names;
+    }
+
     function display() {
         $this->bookshelf->display();
+        foreach ($this->homerooms as $homeroom) {
+            $homeroom->display();
+        }
     }
 }

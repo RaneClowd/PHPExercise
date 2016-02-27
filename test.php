@@ -10,7 +10,10 @@
     include 'DataStore.php';
 
     $dataStore = new DataStore();
-    $dataStore->display();
+
+    foreach ($dataStore->homeroomNames() as $homeroomName) {
+        echo $homeroomName . "<br>";
+    }
 ?>
 
 </body>

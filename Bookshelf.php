@@ -14,8 +14,6 @@ class Bookshelf
         $newBook->lexile = $lexile;
 
         $this->books[] = $newBook;
-
-        $this->display();
     }
 
     function display() {
