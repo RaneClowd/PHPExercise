@@ -3,7 +3,7 @@ function getBookAvailability(bookISBN, studentId) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            document.getElementById("demo").innerHTML = xmlhttp.responseText;
+            showPopup("Select room to borrow from:", "", xmlhttp.responseText);
         }
     };
     xmlhttp.open("GET", "loan.php?isbn=" + bookISBN + "&studentId=" + studentId, true);
@@ -38,4 +38,15 @@ function returnBookForStudent(studentId) {
 
 function refresh() {
     location.reload(true);
+}
+
+function showPopup(title, message, content) {
+    $("#popup").show();
+    $("#popupTitle").text(title);
+    $("#popupMessage").text(message);
+    $("#popupContent").html(content);
+}
+
+function hidePopup() {
+    $("#popup").hide();
 }

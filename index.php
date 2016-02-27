@@ -9,7 +9,7 @@
 <head>
     <title>Library</title>
 
-    <script src="jquery-1.12.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="serviceScript.js"></script>
 
     <style>
@@ -55,7 +55,7 @@
 
             padding: 30px;
 
-            background-color: #3EDFE8;
+            background-color: #50C8FF;
         }
 
         .bigButton {
@@ -126,7 +126,8 @@
     </div>
     <div id="overlay">
         <h3 id="popupTitle"></h3>
-        <span id="popupMessage"></span>;
+        <span id="popupMessage"></span>
+        <div class="centered" id="popupContent"></div>
     </div>
 </div>
 

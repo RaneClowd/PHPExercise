@@ -21,7 +21,7 @@ function respondWithRoomsForLoan() {
     // TODO: check for length of results and error message
 
     foreach ($namesWithBook as $homeroomName) {
-        echo "<button onclick=\"checkOutBookForStudent('$bookISBN', $studentId, '$homeroomName')\" >$homeroomName</button>";
+        echo "<button class='medButton' onclick=\"checkOutBookForStudent('$bookISBN', $studentId, '$homeroomName')\" >$homeroomName</button><br>";
     }
 }
 
