@@ -11,9 +11,6 @@ class DataStore
     function __construct() {
         $this->commonBookshelf = $this->loadMasterBookshelf();
         $this->loadHomeRooms();
-
-        // TODO: figure out what's going on with the timestamp's timezone
-        date_default_timezone_set("America/Chicago");
     }
 
     private function loadMasterBookshelf() {
