@@ -72,7 +72,7 @@
             displayBookContentForStudent($student);
         }
     } else {
-        echo "<form action=\"test.php\" method=get>";
+        echo "<form action=\"index.php\" method=get>";
         if (isset($_GET[$homeroomNameParamKey])) {
             $homeroomName = trim($_GET[$homeroomNameParamKey]);
             $homeroom = $dataStore->homeroomWithName($homeroomName);

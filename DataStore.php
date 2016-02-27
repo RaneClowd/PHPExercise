@@ -1,7 +1,7 @@
 <?php
 
-include 'Bookshelf.php';
-include 'HomeRoom.php';
+include 'DataModels/Bookshelf.php';
+include 'DataModels/HomeRoom.php';
 
 class DataStore
 {
@@ -17,7 +17,7 @@ class DataStore
     }
 
     private function loadMasterBookshelf() {
-        $bookshelfFile = fopen("BookShelf.txt", "r") or die("Unable to open file!");
+        $bookshelfFile = fopen("Resources/BookShelf.txt", "r") or die("Unable to open file!");
         $bookshelf = new Bookshelf();
 
         while(!feof($bookshelfFile)) {
