@@ -1,130 +1,21 @@
 <html>
 
-<!--background?: 50C8FF-->
-<!--accentdark: 3EDFE8-->
-<!--accentlight: 44FFD4-->
-<!--baselight: 3E85E8-->
-<!--basedark: 4461FF-->
-
 <head>
     <title>Library</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="serviceScript.js"></script>
 
-    <style>
-        body {
-            background-color: #50C8FF;
-            margin: 0;
-        }
-
-        button {
-            padding: 0;
-            border: none;
-        }
-
-        #popup {
-            width:100%;
-            height:100%;
-            top:0;
-            left:0;
-            display:none;
-            position:fixed;
-            overflow:auto
-        }
-
-        #mask {
-            width:100%;
-            height:100%;
-            opacity:.65;
-            top:0;
-            left:0;
-            position:fixed;
-            background-color:#313131;
-            overflow:auto
-        }
-
-        #overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 400px;
-            height: 300px;
-            margin-top: -150px;
-            margin-left: -200px;
-
-            padding: 30px;
-
-            background-color: #50C8FF;
-        }
-
-        .bigButton {
-            width: 30%;
-            min-width: 160px;
-            height: 5vw;
-            min-height: 40px;
-            margin-top: 1.5vw;
-            margin-bottom : 1.5vw;
-
-            font-size: 150%;
-
-            background-color: #3EDFE8;
-        }
-
-        .bigButton:hover {
-            background-color: #44FFD4;
-        }
-
-        .medButton {
-            width: 20%;
-            min-width: 160px;
-            height: 3vw;
-            min-height: 40px;
-            margin-top: 1.5vw;
-            margin-bottom : 1.5vw;
-
-            font-size: 120%;
-
-            background-color: #3EDFE8;
-        }
-
-        .medButton:hover {
-            background-color: #44FFD4;
-        }
-
-        .line {
-            width: 100%;
-            height: 2px;
-            background-color: #4461FF;
-            margin: 5px;
-        }
-
-        .content {
-            padding:2vw;
-        }
-
-        .header {
-            background-color: #3E85E8;
-            padding: .01vw;
-            padding-left: 2vw;
-        }
-
-        .centered {
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="Resources/style.css">
 </head>
-
 
 
 <body>
 
-<div id="demo"></div>
-
 <div id="popup">
     <div id="mask">
     </div>
-    <div id="overlay">
+    <div id="overlay" class="centered">
         <h3 id="popupTitle"></h3>
         <span id="popupMessage"></span>
         <div class="centered" id="popupContent"></div>
@@ -236,8 +127,8 @@ function displayHomeRoomOptions() {
 ?>
 
 <hr>
-<form action="allloans.php" method=get>
-    <button>View all loans</button>
+<form class="centered" action="allloans.php" method=get>
+    <button class="bigButton">View all loans</button>
 </form>
 
 </body>

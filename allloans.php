@@ -1,17 +1,21 @@
 <html>
 <head>
-    <title>Sorry</title>
+    <title>Loan Data</title>
+    <link rel="stylesheet" type="text/css" href="Resources/style.css">
 </head>
 
-<body bgcolor="#000000" text="#ffffff">
+<body>
 
 <?php
 include 'DataStore.php';
 
 $dataStore = new DataStore();
 
-echo "<table>";
-
+echo "<table border='1' width='100%'>";
+echo "<th>Date</th>";
+echo "<th>Student</th>";
+echo "<th>Book Title</th>";
+echo "<th>Homeroom</th>";
 foreach ($dataStore->homerooms as $homeroom) {
     foreach ($homeroom->students as $student) {
         if (!empty($student->book)) {
@@ -19,14 +23,14 @@ foreach ($dataStore->homerooms as $homeroom) {
         }
     }
 }
-
 echo "</table>";
 
 function displayLoanInformationForStudent($student) {
     echo "<tr>";
     echo "<td>" . date("m/d/Y H:i", $student->loanTimestamp) . "</td>";
     echo "<td>$student->firstName $student->lastName</td>";
-    echo "<td>" . $student->book->title . " from " . $student->book->homeroom->name . "</td>";
+    echo "<td>" . $student->book->title . "</td>";
+    echo "<td>" . $student->book->homeroom->name . "</td>";
     echo "</tr>";
 }
 

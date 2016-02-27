@@ -11,10 +11,12 @@ function getBookAvailability(bookISBN, studentId) {
 }
 
 function checkOutBookForStudent(bookISBN, studentId, homeroomName) {
+    showPopup("Checking out book...", "", "");
+
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            document.getElementById("demo").innerHTML = xmlhttp.responseText;
+            showPopup("Checkout complete with status:", "", xmlhttp.responseText);
 
             setTimeout(refresh, 2000);
         }
@@ -27,7 +29,7 @@ function returnBookForStudent(studentId) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            document.getElementById("demo").innerHTML = xmlhttp.responseText;
+            showPopup("Return complete with status:", "", xmlhttp.responseText);
 
             setTimeout(refresh, 2000);
         }
