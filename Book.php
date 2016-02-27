@@ -6,6 +6,7 @@ class Book
     public $author; // Better to make an author object, but there's other things I want to spend that time on
     public $ISBN;
     public $lexile;
+    public $homeroom;
     public $isCheckedOut = false;
 
     /*function copyOfBook() {
@@ -21,5 +22,10 @@ class Book
         echo $this->author . "<br>";
         echo $this->ISBN . "<br>";
         echo $this->lexile . "<br>";
+        if ($this->isCheckedOut) {
+            echo "loaned";
+        }
+        echo "<br>";
+        echo $this->homeroom->name . "<br>";
     }
 }

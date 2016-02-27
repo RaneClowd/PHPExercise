@@ -8,7 +8,10 @@
                 <ID>1</ID>
                 <FirstName>David</FirstName>
                 <LastName>Jones</LastName>
-                <HasBook>978-0-547-55029-9</HasBook>
+                <Loan>
+                    <ISBN>978-0-547-55029-9</ISBN>
+                    <Homeroom>UNC</Homeroom>
+                </Loan>
             </Student>
             <Student>
                 <ID>3</ID>
