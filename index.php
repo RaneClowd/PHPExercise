@@ -193,8 +193,8 @@ function displayBookContentForStudent($student) {
             displayListItemForBook($bookAvailability, $student);
         }
     } else {
-        echo "you have " . $student->book->title . " from the " . $student->book->homeroom->name . " room<br>";
-        echo "<button onclick=\"returnBookForStudent($student->studentId)\" >Return</button>";
+        echo "<h2>You currently have " . $student->book->title . " from the " . $student->book->homeroom->name . " room.</h2>";
+        echo "<button class='bigButton' onclick=\"returnBookForStudent($student->studentId)\" >Return</button>";
     }
 }
 
