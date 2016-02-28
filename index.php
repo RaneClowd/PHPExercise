@@ -57,12 +57,12 @@ if (isset($_GET[$studentIdKey])) {
         echo "<h2>What is your name?</h2>";
 
         $homeroomName = trim($_GET[$homeroomNameParamKey]);
-        $homeroom = $dataStore->homeroomWithName($homeroomName);
+        $students = $dataStore->studentsInHomeRoom($homeroomName);
 
-        if ($homeroom == null) {
+        if ($students == null) {
             echo "Error: homeroom not found";
         } else {
-            displayStudentOptions($homeroom);
+            displayStudentOptions($students);
         }
     } else {
         echo "<h2>What is your homeroom?</h2>";
@@ -109,9 +109,9 @@ function displayListItemForBook($bookAvailability, $student) {
     }
 }
 
-function displayStudentOptions($homeroom) {
+function displayStudentOptions($students) {
     global $studentIdKey;
-    foreach ($homeroom->students as $student) {
+    foreach ($students as $student) {
         echo "<button class='bigButton' name='$studentIdKey' value='" . $student->studentId . "' type=\"submit\">$student->firstName $student->lastName</button><br>";
     }
 }

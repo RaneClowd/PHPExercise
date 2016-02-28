@@ -15,10 +15,10 @@ class DataStore
         $username = "raneclowd";
         $password = "raining";
         $database = "skaggsphpdb";
-        $this->dbLink = mysqli_connect($servername, $username, $password, $database);
+        //$this->dbLink = mysqli_connect($servername, $username, $password, $database);
 
         if (!$this->dbLink) {
-            echo "not using database!!!";
+            //echo "not using database!!!";
             $this->commonBookshelf = $this->loadMasterBookshelf();
             $this->loadHomeRooms();
         }
@@ -119,7 +119,14 @@ class DataStore
         $names = array();
 
         if ($this->dbLink) {
+            $sql = "SELECT Homerooms.Name FROM (Homerooms INNER JOIN Books) LEFT JOIN Loans ON Books.ISBN = Loans.ISBN WHERE Books.ISBN='$bookISBN' AND Loans.ISBN IS NULL";
+            $result = $this->dbLink->query($sql);
 
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    array_push($names, $row["Name"]);
+                }
+            }
         } else {
             foreach ($this->homerooms as $homeroom) {
                 $bookInRoom = $homeroom->bookshelf->bookWithISBN($bookISBN);
@@ -145,6 +152,32 @@ class DataStore
         }
 
         return null;
+    }
+
+    function studentsInHomeRoom($homeRoomName) {
+
+        if ($this->dbLink) {
+            $studentArray = array();
+            $sql = "SELECT FirstName, LastName, ID FROM Students WHERE Homeroom = '$homeRoomName'";
+            $result = $this->dbLink->query($sql);
+
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $student = new Student();
+                    $student->firstName = $row["FirstName"];
+                    $student->lastName = $row["LastName"];
+                    $student->studentId = $row["ID"];
+
+                    array_push($studentArray, $student);
+                }
+            }
+            return $studentArray;
+        } else {
+            $homeroom = $this->homeroomWithName($homeRoomName);
+            return $homeroom->students;
+        }
+
     }
 
     function studentWithId($studentId) {
