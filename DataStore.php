@@ -8,22 +8,45 @@ class DataStore
     public $homerooms = array();
     private $commonBookshelf;
 
+    private $dbLink;
+
     function __construct() {
-        $this->commonBookshelf = $this->loadMasterBookshelf();
-        $this->loadHomeRooms();
+        $servername = "db4free.net";
+        $username = "raneclowd";
+        $password = "raining";
+        $database = "skaggsphpdb";
+        $this->dbLink = mysqli_connect($servername, $username, $password, $database);
+
+        if (!$this->dbLink) {
+            echo "not using database!!!";
+            $this->commonBookshelf = $this->loadMasterBookshelf();
+            $this->loadHomeRooms();
+        }
     }
 
     private function loadMasterBookshelf() {
-        $bookshelfFile = fopen("Resources/BookShelf.txt", "r") or die("Unable to open file!");
         $bookshelf = new Bookshelf();
 
-        while(!feof($bookshelfFile)) {
-            $bookLine = fgets($bookshelfFile);
-            $bookComponents = explode("\t", $bookLine);
+        if ($this->dbLink) {
+            $sql = "SELECT Title, Author, ISBN, Lexile FROM Books";
+            $result = $this->dbLink->query($sql);
 
-            $bookshelf->addBook($bookComponents[0], $bookComponents[1], $bookComponents[2], $bookComponents[4]);
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $bookshelf->addBook($row["Title"], $row["Author"], $row["ISBN"], $row["Lexile"]);
+                }
+            }
+        } else {
+            $bookshelfFile = fopen("Resources/BookShelf.txt", "r") or die("Unable to open file!");
+
+            while(!feof($bookshelfFile)) {
+                $bookLine = fgets($bookshelfFile);
+                $bookComponents = explode("\t", $bookLine);
+
+                $bookshelf->addBook($bookComponents[0], $bookComponents[1], $bookComponents[2], $bookComponents[4]);
+            }
+            fclose($bookshelfFile);
         }
-        fclose($bookshelfFile);
 
         return $bookshelf;
     }
@@ -74,23 +97,41 @@ class DataStore
 
     function homeroomNames() {
         $names = array();
-        foreach ($this->homerooms as $homeroom) {
-            array_push($names, $homeroom->name);
+
+        if ($this->dbLink) {
+            $sql = "SELECT Name FROM Homerooms";
+            $result = $this->dbLink->query($sql);
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    array_push($names, $row["Name"]);
+                }
+            }
+        } else {
+            foreach ($this->homerooms as $homeroom) {
+                array_push($names, $homeroom->name);
+            }
         }
         return $names;
     }
 
     function homeroomNamesWithBook($bookISBN) {
         $names = array();
-        foreach ($this->homerooms as $homeroom) {
-            $bookInRoom = $homeroom->bookshelf->bookWithISBN($bookISBN);
 
-            // TODO: error if book not found
+        if ($this->dbLink) {
 
-            if (!$bookInRoom->isCheckedOut()) {
-                array_push($names, $homeroom->name);
+        } else {
+            foreach ($this->homerooms as $homeroom) {
+                $bookInRoom = $homeroom->bookshelf->bookWithISBN($bookISBN);
+
+                // TODO: error if book not found
+
+                if (!$bookInRoom->isCheckedOut()) {
+                    array_push($names, $homeroom->name);
+                }
             }
         }
+
         return $names;
 
         // TODO: return array of error and results
