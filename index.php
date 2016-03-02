@@ -24,6 +24,7 @@
 
 <?php
 include 'DataStore.php';
+include_once 'DataConnection.php';
 
 $dataStore = new DataStore();
 
@@ -117,10 +118,18 @@ function displayStudentOptions($students) {
 }
 
 function displayHomeRoomOptions() {
-    global $dataStore, $homeroomNameParamKey;
+    global $homeroomNameParamKey;
 
-    foreach ($dataStore->homeroomNames() as $homeroomName) {
-        echo "<button class='bigButton' type='submit' name='$homeroomNameParamKey' value='$homeroomName'>$homeroomName</button><br>";
+    $dataConnection = new DataConnection();
+    $response = $dataConnection->homeroomNamesList();
+
+    if ( !empty($response["errorMsg"])) {
+        // TODO: display graceful error
+        echo $response["errorMsg"];
+    } else {
+        foreach ($response["results"] as $homeroomName) {
+            echo "<button class='bigButton' type='submit' name='$homeroomNameParamKey' value='$homeroomName'>$homeroomName</button><br>";
+        }
     }
 }
 
