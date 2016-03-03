@@ -1,4 +1,5 @@
 <?php
+include_once $_SERVER['DOCUMENT_ROOT'] . '/Common/Response.php';
 
 class DataConnection
 {
@@ -6,25 +7,24 @@ class DataConnection
     private $dbLink;
 
     public function callProc($procName) {
-        $errorMsg = null;
-        $results = null;
+        $response = new Response();
 
         if ( !$this->connectionEstablished()) {
-            $errorMsg = "Error reaching database";
+            $response->errorMsg = "Error reaching database";
         } else {
-            $queryResult = $this->dbLink->query("CALL $procName()");
+            $queryResult = $this->dbLink->query("CALL $procName");
 
             if ($queryResult == false) {
-                $errorMsg = "Error in database";
+                $response->errorMsg = "Error in database: " . mysqli_error($this->dbLink);
             } else {
-                $results = array();
+                $response->result = array();
                 while($row = $queryResult->fetch_assoc()) {
-                    array_push($results, $row);
+                    array_push($response->result, $row);
                 }
             }
         }
 
-        return array("errorMsg" => $errorMsg, "results" => $results);
+        return $response;
     }
 
     private function connectionEstablished() {

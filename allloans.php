@@ -28,7 +28,7 @@ echo "</table>";
 function displayLoanInformationForStudent($student) {
     echo "<tr>";
     echo "<td>" . date("m/d/Y H:i", $student->loanTimestamp) . "</td>";
-    echo "<td>$student->firstName $student->lastName</td>";
+    echo "<td>$student->FirstName $student->LastName</td>";
     echo "<td>" . $student->book->title . "</td>";
     echo "<td>" . $student->book->homeroom->name . "</td>";
     echo "</tr>";

@@ -1,7 +1,7 @@
 <?php
 
 include 'DataModels/Bookshelf.php';
-include 'DataModels/Homeroom.php';
+include_once 'DataModels/Homeroom.php';
 
 class DataStore
 {
@@ -268,9 +268,9 @@ class DataStore
             $studentsRootNode = $homeroomNode->addChild('Students');
             foreach ($homeroom->students as $student) {
                 $studentNode = $studentsRootNode->addChild('Student');
-                $studentNode->addChild('ID', $student->studentId);
-                $studentNode->addChild('FirstName', $student->firstName);
-                $studentNode->addChild('LastName', $student->lastName);
+                $studentNode->addChild('ID', $student->ID);
+                $studentNode->addChild('FirstName', $student->FirstName);
+                $studentNode->addChild('LastName', $student->LastName);
 
                 if (!empty($student->book)) {
                     $loanNode = $studentNode->addChild('Loan');

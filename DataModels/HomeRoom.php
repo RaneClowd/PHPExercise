@@ -1,14 +1,14 @@
 <?php
-
+include_once 'Object.php';
 include 'Student.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/DataConnection.php';
 
-class Homeroom
+class Homeroom extends Object
 {
 
     static function homeroomNames() {
         $dataConnection = new DataConnection();
-        return $dataConnection->callProc("HomeroomNames");
+        return $dataConnection->callProc("HomeroomNames()");
     }
 
 
