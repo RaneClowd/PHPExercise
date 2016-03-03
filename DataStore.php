@@ -1,7 +1,7 @@
 <?php
 
 include 'DataModels/Bookshelf.php';
-include 'DataModels/HomeRoom.php';
+include 'DataModels/Homeroom.php';
 
 class DataStore
 {
@@ -56,16 +56,16 @@ class DataStore
         $loanConnectionsToMake = array();
 
         foreach ($studentFile->children() as $homeRoomNode) {
-            $homeRoom = new HomeRoom();
+            $homeRoom = new Homeroom();
             $homeRoom->name = $homeRoomNode->Name;
             $homeRoom->level = $homeRoomNode->Level;
             $homeRoom->fillBookshelfWithCopy($this->commonBookshelf);
 
             foreach ($homeRoomNode->Students->children() as $studentNode) {
                 $student = new Student();
-                $student->firstName = $studentNode->FirstName;
-                $student->lastName = $studentNode->LastName;
-                $student->studentId = $studentNode->ID;
+                $student->FirstName = $studentNode->FirstName;
+                $student->LastName = $studentNode->LastName;
+                $student->ID = $studentNode->ID;
 
                 if (!empty($studentNode->Loan)) {
                     $loanTimestamp = strtotime($studentNode->Loan->Date);
@@ -165,9 +165,9 @@ class DataStore
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
                     $student = new Student();
-                    $student->firstName = $row["FirstName"];
-                    $student->lastName = $row["LastName"];
-                    $student->studentId = $row["ID"];
+                    $student->FirstName = $row["FirstName"];
+                    $student->LastName = $row["LastName"];
+                    $student->ID = $row["ID"];
 
                     array_push($studentArray, $student);
                 }

@@ -24,11 +24,14 @@
 
 <?php
 include 'DataStore.php';
-include_once 'DataConnection.php';
+include_once 'ViewControllers/HomeroomViewController.php';
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 $dataStore = new DataStore();
 
-$homeroomNameParamKey = "homeroom";
 $studentIdKey = "id";
 
 
@@ -54,21 +57,14 @@ if (isset($_GET[$studentIdKey])) {
     echo "</div>";
 
     echo "<form action=\"index.php\" method=get>";
-    if (isset($_GET[$homeroomNameParamKey])) {
+    if (isset($_REQUEST[HomeroomViewController::$parameterKey])) {
         echo "<h2>What is your name?</h2>";
 
-        $homeroomName = trim($_GET[$homeroomNameParamKey]);
-        $students = $dataStore->studentsInHomeRoom($homeroomName);
-
-        if ($students == null) {
-            echo "Error: homeroom not found";
-        } else {
-            displayStudentOptions($students);
-        }
+        HomeroomViewController::displayStudentOptions();
     } else {
         echo "<h2>What is your homeroom?</h2>";
 
-        displayHomeRoomOptions();
+        HomeroomViewController::displayHomeRoomNames();
     }
     echo "</form>";
 }
@@ -107,29 +103,6 @@ function displayListItemForBook($bookAvailability, $student) {
         echo "<button class='medButton' onclick=\"getBookAvailability('$book->ISBN', $student->studentId)\">Borrow!</button>";
     } else {
         echo "sorry, all checked out";
-    }
-}
-
-function displayStudentOptions($students) {
-    global $studentIdKey;
-    foreach ($students as $student) {
-        echo "<button class='bigButton' name='$studentIdKey' value='" . $student->studentId . "' type=\"submit\">$student->firstName $student->lastName</button><br>";
-    }
-}
-
-function displayHomeRoomOptions() {
-    global $homeroomNameParamKey;
-
-    $dataConnection = new DataConnection();
-    $response = $dataConnection->homeroomNamesList();
-
-    if ( !empty($response["errorMsg"])) {
-        // TODO: display graceful error
-        echo $response["errorMsg"];
-    } else {
-        foreach ($response["results"] as $homeroomName) {
-            echo "<button class='bigButton' type='submit' name='$homeroomNameParamKey' value='$homeroomName'>$homeroomName</button><br>";
-        }
     }
 }
 

@@ -2,19 +2,25 @@
 
 class DataConnection
 {
+    // TODO: get this shared between instances
     private $dbLink;
 
-    public function homeroomNamesList() {
+    public function callProc($procName) {
         $errorMsg = null;
         $results = null;
 
         if ( !$this->connectionEstablished()) {
             $errorMsg = "Error reaching database";
         } else {
-            $queryResult = $this->dbLink->query("CALL HomeroomNames()");
-            $results = array();
-            while($row = $queryResult->fetch_assoc()) {
-                array_push($results, $row["Name"]);
+            $queryResult = $this->dbLink->query("CALL $procName()");
+
+            if ($queryResult == false) {
+                $errorMsg = "Error in database";
+            } else {
+                $results = array();
+                while($row = $queryResult->fetch_assoc()) {
+                    array_push($results, $row);
+                }
             }
         }
 
@@ -36,7 +42,7 @@ class DataConnection
         $database = "skaggsphpdb";
         $this->dbLink = mysqli_connect($servername, $username, $password, $database);
 
-        if (!$this->dbLink) {
+        if (empty($this->dbLink)) {
             return false;
         }
         return true;

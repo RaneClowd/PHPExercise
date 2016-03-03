@@ -1,9 +1,21 @@
 <?php
 
 include 'Student.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/DataConnection.php';
 
-class HomeRoom
+class Homeroom
 {
+
+    static function homeroomNames() {
+        $dataConnection = new DataConnection();
+        return $dataConnection->callProc("HomeroomNames");
+    }
+
+
+
+
+    // TODO: delete these older things if they're no longer needed
+
     public $name;
     public $students = array();
     public $level;

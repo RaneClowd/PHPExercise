@@ -1,13 +1,26 @@
 <?php
-
-// would include book here, but that causes it to be included twice elsewhere (HomeRoom)
-// TODO: find way to include if needed
+include_once $_SERVER['DOCUMENT_ROOT'] . '/DataConnection.php';
 
 class Student
 {
-    public $studentId;
-    public $firstName;
-    public $lastName;
+    public $ID;
+    public $FirstName;
+    public $LastName;
+
+    static function studentNamesInRoom($homeroomName) {
+        $dataConnection = new DataConnection();
+        $response = $dataConnection->callProc("StudentsInRoom($homeroomName)");
+
+
+
+        return $response;
+    }
+
+
+
+    // TODO: delete this older stuff if not needed
+
+
 
     public $homeroom;
     public $book;
@@ -26,7 +39,7 @@ class Student
     }
 
     function display() {
-        echo "$this->firstName $this->lastName ($this->studentId)" . "<br>";
+        echo "$this->FirstName $this->LastName ($this->ID)" . "<br>";
 
         if ($this->book != null) {
             echo "has book " . $this->book->title . "<br>";
