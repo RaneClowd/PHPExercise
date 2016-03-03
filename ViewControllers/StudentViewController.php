@@ -5,28 +5,27 @@ class StudentViewController extends ViewController
 {
     public static $parameterKey = "id";
 
-    public static function displayStudentView() {
+    private $student;
+
+    public function __construct() {
         $studentID = $_REQUEST[StudentViewController::$parameterKey];
         $response = Student::studentWithID($studentID);
 
         if ( !empty($response->errorMsg)) {
-            StudentViewController::displayErrorMessage($response->errorMsg);
+            $this->displayErrorMessage($response->errorMsg);
         } else if ( empty($response->result)) {
-            StudentViewController::displayErrorMessage("Unable to find student record.");
+            $this->displayErrorMessage("Unable to find student record.");
         } else {
-            $student = $response->result;
-
-            echo "<div class='header'>";
-            var_dump($student);
-            echo "<h1>Hi $student->FirstName!</h1>";
-            echo "</div>";
-
-            if ($student == null) {
-                //echo "Error: student not found";
-            } else {
-                //displayBookContentForStudent($student);
-            }
+            $this->student = $response->result;
         }
+    }
+
+    public function displayHeaderContent() {
+        echo "<h1>Hi {$this->student->FirstName}!</h1>";
+    }
+
+    public function displayBodyContent() {
+        // TODO: Implement displayBodyContent() method.
     }
 
     /*function displayBookContentForStudent($student) {

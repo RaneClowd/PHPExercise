@@ -1,8 +1,11 @@
 <?php
 
-class ViewController
+abstract class ViewController
 {
-    public static function displayErrorMessage($errorMsg) {
+    abstract public function displayHeaderContent();
+    abstract public function displayBodyContent();
+
+    protected function displayErrorMessage($errorMsg) {
         // TODO: display errors gracefully
         echo $errorMsg . "<br>";
     }

@@ -7,7 +7,24 @@ class HomeroomViewController extends ViewController
 {
     public static $parameterKey = "homeroom";
 
-    public static function displayHomeRoomNames() {
+    public function displayHeaderContent() {
+        echo "<h1>Let's get to your books</h1>";
+    }
+
+    public function displayBodyContent()
+    {
+        if (isset($_REQUEST[HomeroomViewController::$parameterKey])) {
+            echo "<h2>What is your name?</h2>";
+
+            HomeroomViewController::displayStudentOptions($_REQUEST[HomeroomViewController::$parameterKey]);
+        } else {
+            echo "<h2>What is your homeroom?</h2>";
+
+            HomeroomViewController::displayHomeRoomNames();
+        }
+    }
+
+    private static function displayHomeRoomNames() {
         $response = Homeroom::homeroomNames();
         if ( !empty($response->errorMsg)) {
             HomeroomViewController::displayErrorMessage($response["errorMsg"]);
@@ -18,7 +35,7 @@ class HomeroomViewController extends ViewController
         }
     }
 
-    public static function displayStudentOptions($homeroomName) {
+    private static function displayStudentOptions($homeroomName) {
         $response = Student::studentNamesInRoom($homeroomName);
         if ( !empty($response->errorMsg)) {
             HomeroomViewController::displayErrorMessage($response["errorMsg"]);

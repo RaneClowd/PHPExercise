@@ -30,28 +30,25 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+$viewController = viewControllerForPageState();
+
 echo "<div class='content centered'>";
-if (isset($_GET[StudentViewController::$parameterKey])) {
-    StudentViewController::displayStudentView();
-} else {
-
-    echo "<div class='header'>";
-    echo "<h1>Let's get to your books</h1>";
-    echo "</div>";
-
-    echo "<form action=\"index.php\" method=get>";
-    if (isset($_REQUEST[HomeroomViewController::$parameterKey])) {
-        echo "<h2>What is your name?</h2>";
-
-        HomeroomViewController::displayStudentOptions($_REQUEST[HomeroomViewController::$parameterKey]);
-    } else {
-        echo "<h2>What is your homeroom?</h2>";
-
-        HomeroomViewController::displayHomeRoomNames();
-    }
-    echo "</form>";
-}
+echo "<div class='header'>";
+$viewController->displayHeaderContent();
 echo "</div>";
+
+echo "<form action=\"index.php\" method=get>";
+$viewController->displayBodyContent();
+echo "</form>";
+echo "</div>";
+
+function viewControllerForPageState() {
+    if (isset($_GET[StudentViewController::$parameterKey])) {
+        return new StudentViewController();
+    } else {
+        return new HomeroomViewController();
+    }
+}
 
 ?>
 
