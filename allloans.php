@@ -7,7 +7,6 @@
 <body>
 
 <?php
-include 'DataStore.php';
 
 $dataStore = new DataStore();
 

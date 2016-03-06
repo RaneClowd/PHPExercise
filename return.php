@@ -1,5 +1,4 @@
 <?php
-include 'DataStore.php';
 
 $studentId = trim($_REQUEST["studentId"]);
 

@@ -1,36 +1,30 @@
 <?php
+require_once 'Object.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/DataConnection.php';
 
-class Book
+class Book extends Object
 {
-    public $title;
-    public $author; // Better to make an author object, but there's other things I want to spend that time on
+    public $Title;
+    public $Author; // Better to make an author object, but there's other things I want to spend that time on
     public $ISBN;
-    public $lexile;
-    public $homeroom;
+    public $Lexile;
+    public $NumCopiesAvailable;
 
-    public $student;
+    public static function allBooksAndAvailability() {
+        $dataConnection = new DataConnection();
+        $response = $dataConnection->callProc("ListBooksAndCopiesFree()");
 
-    function isCheckedOut() {
-        return !empty($this->student);
-    }
+        if ( !empty($response->result)) {
+            $bookArray = array();
+            foreach ($response->result as $row) {
+                $book = new Book();
+                $book->populateWithArray($row);
 
-    /*function copyOfBook() {
-        // TODO: checked out is the only thing i really want to clone. Check to see if clone will work here
-
-        $bookCopy = new Book();
-        $bookCopy->title = $this->title;
-        $bookCopy->author
-    }*/
-
-    function display() {
-        echo $this->title . "<br>";
-        echo $this->author . "<br>";
-        echo $this->ISBN . "<br>";
-        echo $this->lexile . "<br>";
-        if ($this->isCheckedOut) {
-            echo "loaned";
+                array_push($bookArray, $book);
+            }
+            $response->result = $bookArray;
         }
-        echo "<br>";
-        echo $this->homeroom->name . "<br>";
+
+        return $response;
     }
 }

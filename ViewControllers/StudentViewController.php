@@ -1,5 +1,7 @@
 <?php
-include_once 'ViewController.php';
+require_once 'ViewController.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/DataModels/Student.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/DataModels/Book.php';
 
 class StudentViewController extends ViewController
 {
@@ -25,7 +27,19 @@ class StudentViewController extends ViewController
     }
 
     public function displayBodyContent() {
-        // TODO: Implement displayBodyContent() method.
+        if ( !empty($this->student->book)) {
+            // TODO: show that student has book
+        } else {
+            $response = Book::allBooksAndAvailability();
+
+            if ( !empty($response->errorMsg)) {
+                $this->displayErrorMessage($response->errorMsg);
+            } else {
+                foreach ($response->result as $book) {
+                    $this->displayListItemForBook($book);
+                }
+            }
+        }
     }
 
     /*function displayBookContentForStudent($student) {
@@ -40,25 +54,23 @@ class StudentViewController extends ViewController
         echo "<h2>You currently have " . $student->book->title . " from the " . $student->book->homeroom->name . " room.</h2>";
         echo "<button class='bigButton' onclick=\"returnBookForStudent($student->studentId)\" >Return</button>";
     }
-}
-
-function displayListItemForBook($bookAvailability, $student) {
-    $book = $bookAvailability[0];
-    $available = $bookAvailability[1];
-
-    static $bookDisplayed = false;
-    if ($bookDisplayed) {
-        echo "<div class='line'></div>";
-    }
-    echo "<h2>$book->title</h2>";
-    echo "by $book->author<br>";
-    echo "(Lexile#: $book->lexile)<br>";
-    $bookDisplayed = true;
-
-    if ($available) {
-        echo "<button class='medButton' onclick=\"getBookAvailability('$book->ISBN', $student->studentId)\">Borrow!</button>";
-    } else {
-        echo "sorry, all checked out";
-    }
 }*/
+
+    private function displayListItemForBook($book) {
+        static $firstBookDisplayed = false;
+        if ($firstBookDisplayed) {
+            echo "<div class='line'></div>";
+        }
+
+        echo "<h2>$book->Title</h2>";
+        echo "by $book->Author<br>";
+        echo "(Lexile#: $book->Lexile)<br>";
+        $firstBookDisplayed = true;
+
+        if ($book->NumCopiesAvailable > 0) {
+            echo "<button class='medButton' onclick=\"getBookAvailability('$book->ISBN', {$this->student->ID})\">Borrow!</button>";
+        } else {
+            echo "sorry, all checked out";
+        }
+    }
 }
