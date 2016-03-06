@@ -9,7 +9,7 @@ $studentId = trim($_REQUEST["studentId"]);
 if (empty($homeroomName)) {
     echo responseWithRoomsForLoan($bookISBN);
 } else {
-    loanBook();
+    echo responseForLoaningBook();
 }
 
 function responseWithRoomsForLoan($bookISBN) {
@@ -32,15 +32,15 @@ function responseWithRoomsForLoan($bookISBN) {
     return json_encode($response);
 }
 
-function loanBook() {
-    global $bookISBN, $homeroomName, $studentId, $dataStore;
+function responseForLoaningBook() {
+    global $bookISBN, $homeroomName, $studentId;
 
-    $dataStore = new DataStore();
-    $errorMessage = $dataStore->checkoutBookWithISBNAndStudentFromHomeroom($bookISBN, $studentId, $homeroomName);
+    $homeroom = new Homeroom($homeroomName);
+    $response = $homeroom->checkOutIsbnToStudent($bookISBN, $studentId);
 
-    if (!empty($errorMessage)) {
-        echo "Error: " . $errorMessage;
-    } else {
-        echo "book checked out";
+    if ( !empty($response->errorMsg)) {
+        $response->errorMsg = "There was a problem getting the book. Please try again.";
     }
+
+    return json_encode($response);
 }

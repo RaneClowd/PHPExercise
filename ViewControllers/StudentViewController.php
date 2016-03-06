@@ -29,6 +29,7 @@ class StudentViewController extends ViewController
     public function displayBodyContent() {
         if ( !empty($this->student->book)) {
             // TODO: show that student has book
+            echo "You have a book";
         } else {
             $response = Book::allBooksAndAvailability();
 

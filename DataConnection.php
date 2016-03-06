@@ -16,7 +16,7 @@ class DataConnection
 
             if ($queryResult == false) {
                 $response->errorMsg = "Error in database: " . mysqli_error($this->dbLink);
-            } else {
+            } else if ($queryResult !== true) { // TODO: handle this better. Just making sure it's not only a bool response for now
                 $response->result = array();
                 while($row = $queryResult->fetch_assoc()) {
                     array_push($response->result, $row);
