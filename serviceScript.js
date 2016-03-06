@@ -1,13 +1,13 @@
 
 function getBookAvailability(bookISBN, studentId) {
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            showPopup("Select room to borrow from:", "", xmlhttp.responseText);
+    $.ajax({url: "loanController.php?isbn=" + bookISBN + "&studentId=" + studentId, success: function(result){
+        var response = jQuery.parseJSON(result);
+        if ( !response.errorMsg) {
+            showPopup("Select room to borrow from:", "", response.result);
+        } else {
+            showPopup("Error:", "", response.errorMsg);
         }
-    };
-    xmlhttp.open("GET", "loan.php?isbn=" + bookISBN + "&studentId=" + studentId, true);
-    xmlhttp.send();
+    }});
 }
 
 function checkOutBookForStudent(bookISBN, studentId, homeroomName) {
@@ -21,7 +21,7 @@ function checkOutBookForStudent(bookISBN, studentId, homeroomName) {
             setTimeout(refresh, 2000);
         }
     };
-    xmlhttp.open("GET", "loan.php?isbn=" + bookISBN + "&studentId=" + studentId + "&homeroom=" + homeroomName, true);
+    xmlhttp.open("GET", "loanController.php?isbn=" + bookISBN + "&studentId=" + studentId + "&homeroom=" + homeroomName, true);
     xmlhttp.send();
 }
 

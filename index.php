@@ -12,13 +12,14 @@
 
 <body>
 
-<div id="popup">
-    <div id="mask">
-    </div>
-    <div id="overlay" class="centered">
-        <h3 id="popupTitle"></h3>
-        <span id="popupMessage"></span>
-        <div class="centered" id="popupContent"></div>
+<div id="popup" class="centered">
+    <div id="mask"></div>
+    <div class="centeredBoxContainer">
+        <div id="overlay" class="centered">
+            <h3 id="popupTitle"></h3>
+            <span id="popupMessage"></span>
+            <div class="centered" id="popupContent"></div>
+        </div>
     </div>
 </div>
 
