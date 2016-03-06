@@ -13,6 +13,7 @@ class HomeroomViewController extends ViewController
 
     public function displayBodyContent()
     {
+        echo "<form action=\"index.php\" method=get>";
         if (isset($_REQUEST[HomeroomViewController::$parameterKey])) {
             echo "<h2>What is your name?</h2>";
 
@@ -22,6 +23,7 @@ class HomeroomViewController extends ViewController
 
             HomeroomViewController::displayHomeRoomNames();
         }
+        echo "</form>";
     }
 
     private static function displayHomeRoomNames() {

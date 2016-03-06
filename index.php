@@ -37,10 +37,7 @@ echo "<div class='content centered'>";
 echo "<div class='header'>";
 $viewController->displayHeaderContent();
 echo "</div>";
-
-echo "<form action=\"index.php\" method=get>";
 $viewController->displayBodyContent();
-echo "</form>";
 echo "</div>";
 
 function viewControllerForPageState() {

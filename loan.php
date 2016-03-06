@@ -1,10 +1,9 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/DataModels/Homeroom.php';
 
 $bookISBN = trim($_REQUEST["isbn"]);
 $homeroomName = trim($_REQUEST["homeroom"]);
 $studentId = trim($_REQUEST["studentId"]);
-
-$dataStore = new DataStore();
 
 if (empty($homeroomName)) {
     respondWithRoomsForLoan($bookISBN);
@@ -12,15 +11,14 @@ if (empty($homeroomName)) {
     loanBook();
 }
 
-function respondWithRoomsForLoan() {
-    global $dataStore, $bookISBN, $studentId;
-
-    $namesWithBook = $dataStore->homeroomNamesWithBook($bookISBN);
+function respondWithRoomsForLoan($bookISBN) {
+    global $studentId;
+    $response = Homeroom::homeroomsWithBook($bookISBN);
 
     // TODO: check for length of results and error message
 
-    foreach ($namesWithBook as $homeroomName) {
-        echo "<button class='medButton' onclick=\"checkOutBookForStudent('$bookISBN', $studentId, '$homeroomName')\" >$homeroomName</button><br>";
+    foreach ($response->result as $homeroom) {
+        echo "<button class='medButton' onclick=\"checkOutBookForStudent('$bookISBN', $studentId, '{$homeroom['Name']}')\" >{$homeroom['Name']}</button><br>";
     }
 }
 

@@ -5,12 +5,15 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/DataConnection.php';
 
 class Homeroom extends Object
 {
-
-    static function homeroomNames() {
+    public static function homeroomNames() {
         $dataConnection = new DataConnection();
         return $dataConnection->callProc("HomeroomNames()");
     }
 
+    public static function homeroomsWithBook($isbn) {
+        $dataConnection = new DataConnection();
+        return $dataConnection->callProc("HomeroomsWithBook('$isbn')");
+    }
 
 
 
